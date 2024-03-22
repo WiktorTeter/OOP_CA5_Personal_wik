@@ -17,28 +17,28 @@ package DTOs;
 public class User
 {
     private int id;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
+    private String title;
+    private String author;
+    private Float price;
 
-    public User(int userId, String firstName, String lastName, String username, String password)
+
+    public User(int userId, String title, String author, Float price)
     {
         this.id = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
+        this.title = title;
+        this.author = author;
+        this.price = price;
     }
 
-    public User( String firstName, String lastName, String username, String password)
+
+    public User( String title, String author, Float price)
     {
         this.id = 0;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
+        this.title = title;
+        this.author = author;
+        this.price = price;
     }
+
 
     public User()
     {
@@ -54,51 +54,45 @@ public class User
         this.id = id;
     }
 
-    public String getFirstName()
+    public String getAuthor()
     {
-        return firstName;
+        return author;
     }
 
-    public void setFirstName(String firstName)
+    public void setAuthor(String author)
     {
-        this.firstName = firstName;
+        this.author = author;
     }
 
-    public String getLastName()
+    public String getTitle()
     {
-        return lastName;
+        return title;
     }
 
-    public void setLastName(String lastName)
+    public void setTitle(String title)
     {
-        this.lastName = lastName;
+        this.title = title;
     }
 
-    public String getUsername()
+    public Float getPrice()
     {
-        return username;
+        return price;
     }
 
-    public void setUsername(String username)
+    public void setPrice(String price)
     {
-        this.username = username;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
+        this.price = Float.valueOf(price);
     }
 
     @Override
     public String toString()
     {
-        return "User{" + "id=" + id + ", firstName=" + firstName + ", lastName=" +
-                lastName + ", username=" + username + ", password=" + password + '}';
+        return "User{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", price=" + price +
+                '}';
     }
 
 }

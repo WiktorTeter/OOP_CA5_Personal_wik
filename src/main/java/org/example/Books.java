@@ -41,7 +41,7 @@ public class Books {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String author = rs.getString("author");
-                double price = rs.getDouble("price");
+                float price = rs.getFloat("price");
                 System.out.println("ID: " + id + ", Title: " + title + ", Author: " + author + ", Price: " + price);
             }
 

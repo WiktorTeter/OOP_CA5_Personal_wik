@@ -55,12 +55,11 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                int userId = resultSet.getInt("USER_ID");
-                String username = resultSet.getString("USERNAME");
-                String password = resultSet.getString("PASSWORD");
-                String lastname = resultSet.getString("LAST_NAME");
-                String firstname = resultSet.getString("FIRST_NAME");
-                User u = new User(userId, firstname, lastname, username, password);
+                int userId = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                float price = resultSet.getFloat("price");
+                User u = new User(userId, title, author, price);
                 usersList.add(u);
             }
         } catch (SQLException e)
@@ -116,13 +115,12 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
             {
-                int userId = resultSet.getInt("USER_ID");
-                String username = resultSet.getString("USERNAME");
-                String pwd = resultSet.getString("PASSWORD");
-                String lastname = resultSet.getString("LAST_NAME");
-                String firesultSettname = resultSet.getString("FIRST_NAME");
+                int id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                Float price = resultSet.getFloat("price");
 
-                user = new User(userId, firesultSettname, lastname, username, pwd);
+                user = new User(id, title, author, price);
             }
         } catch (SQLException e)
         {
