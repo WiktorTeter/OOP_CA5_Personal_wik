@@ -55,11 +55,11 @@ public class MySqlUserDao extends MySqlDao implements UserDaoInterface
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
             {
-                int userId = resultSet.getInt("id");
+                int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 float price = resultSet.getFloat("price");
-                User u = new User(userId, title, author, price);
+                User u = new User(id, title, author, price);
                 usersList.add(u);
             }
         } catch (SQLException e)

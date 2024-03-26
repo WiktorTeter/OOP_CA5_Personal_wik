@@ -22,9 +22,9 @@ public class User
     private Float price;
 
 
-    public User(int userId, String title, String author, Float price)
+    public User(int id, String title, String author, Float price)
     {
-        this.id = userId;
+        this.id = id;
         this.title = title;
         this.author = author;
         this.price = price;

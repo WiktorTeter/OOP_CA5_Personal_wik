@@ -24,13 +24,11 @@ INSERT INTO books (id, title, author, price) VALUES
  */
 public class Books {
     public void start(){
-        String url = "jdbc:mysql://localhost/";
-        String dbName = "bookshop";
-        String fullUrl = url + dbName;
+        String url = "jdbc:mysql://localhost:3306/bookshop";
         String userName = "root";
         String password = "";
 
-        try(Connection conn = DriverManager.getConnection(fullUrl, userName, password))
+        try(Connection conn = DriverManager.getConnection(url, userName, password))
         {
 
             Statement stmt = conn.createStatement();
