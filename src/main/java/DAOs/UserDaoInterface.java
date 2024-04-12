@@ -19,15 +19,25 @@ package DAOs;
  * can be replaced by mock DAO objects.
  */
 
-import DTOs.User;
+import DTOs.Book;
 import Exceptions.DaoException;
 import java.util.List;
 
 public interface UserDaoInterface
 {
-    public List<User> findAllUsers() throws DaoException;
+    public List<Book> findAllBooks() throws DaoException;
 
-    public User findUserByUsernamePassword(String username, String password) throws DaoException;
+    public Book getBookByID(int id) throws DaoException;
+
+    public void insertBook(int id, String title, String author, float price) throws DaoException;
+
+    public Book deleteBookByID(int id) throws DaoException;
+
+    public void updateBookByID(int id, String title, String author, float price) throws DaoException;
+
+
+    List<Book> getBookByFilter(Book filter);
+
 
 }
 
