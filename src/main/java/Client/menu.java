@@ -45,7 +45,7 @@ public class menu {
             Scanner consoleInput = new Scanner(System.in);
             boolean continueRunning = true;
             while(continueRunning) {
-                System.out.println("Valid commands are: \"display all\", \"display <id>\", \"quit\"");
+                System.out.println("Valid commands are: \"display all\", \"display <id>\", \"add book\" ,\"quit\"");
                 System.out.print("Please enter a command: ");
                 String userInput = consoleInput.nextLine();
 
