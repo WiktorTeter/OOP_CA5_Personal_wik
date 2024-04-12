@@ -1,4 +1,4 @@
-package DAOs;
+package Server.example.DAOs;
 
 /** OOP Feb 2024
  *
@@ -18,8 +18,8 @@ package DAOs;
  * in the DAO layer.
  */
 
-import DTOs.Book;
-import Exceptions.DaoException;
+import Server.example.DTOs.Book;
+import Server.example.Exceptions.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -242,6 +242,10 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
 
     // Feature 7 - Convert List of Entities to a JSON String
     public String convertListToJSON(List<Book> books) {
+        String url = "jdbc:mysql://localhost:3306/bookshop";
+        String userName = "root";
+        String password = "";
+
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (Book book : books) {

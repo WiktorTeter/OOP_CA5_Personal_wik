@@ -1,4 +1,4 @@
-package Exceptions;
+package Server.example.Exceptions;
 
 /**     Feb 2022
  * A 'homemade' Exception to report exceptions

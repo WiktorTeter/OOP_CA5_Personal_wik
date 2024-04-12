@@ -1,4 +1,4 @@
-package DAOs;
+package Server.example.DAOs;
 
 /** OOP Feb 2022
  * UserDaoInterface
@@ -19,8 +19,8 @@ package DAOs;
  * can be replaced by mock DAO objects.
  */
 
-import DTOs.Book;
-import Exceptions.DaoException;
+import Server.example.DTOs.Book;
+import Server.example.Exceptions.DaoException;
 import java.util.List;
 
 public interface UserDaoInterface

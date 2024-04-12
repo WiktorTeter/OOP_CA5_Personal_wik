@@ -1,4 +1,4 @@
-package DAOs;
+package Server.example.DAOs;
 /** MySqlDao -
  * - implements functionality that is common to all MySQL DAOs
  * - i.e. getConection() and freeConnection()
@@ -11,7 +11,7 @@ package DAOs;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import Exceptions.DaoException;
+import Server.example.Exceptions.DaoException;
 
 public class MySqlDao
 {
