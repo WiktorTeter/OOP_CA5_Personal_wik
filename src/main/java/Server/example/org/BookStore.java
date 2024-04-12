@@ -245,10 +245,10 @@ public class BookStore {
     }
 
     private static void findAllBooksAndConvertToJSON() throws DaoException {
-        List<Book> books = BookStore.userDao.findAllBooks();
-        String json = ((MySqlBooksDao) BookStore.userDao).convertListToJSON(books);
+        List<Book> books = BookStore.userDao.findAllBooks();  // Fetch all books
+        String json = ((MySqlBooksDao) BookStore.userDao).convertListToJSON(books);  // Convert to JSON
         System.out.println("JSON representation of all books:");
-        System.out.println(json);
+        System.out.println(json);  // Print JSON
     }
 
     private static void convertBookByIDToJson(int id) throws DaoException {
@@ -286,6 +286,16 @@ public class BookStore {
                 while ((request = socketReader.readLine()) != null) {
                     System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + request);
 
+                    if (request.equalsIgnoreCase("display all")) {
+                        try {
+                            List<Book> books = BookStore.userDao.findAllBooks();
+                            String json = ((MySqlBooksDao) BookStore.userDao).convertListToJSON(books);
+                            socketWriter.println(json);
+                        } catch (DaoException e) {
+                            socketWriter.println("Error: " + e.getMessage());
+                        }
+                    }
+
                     if (request.startsWith("display ")) {
                         try {
                             int id = Integer.parseInt(request.substring(8).trim());
@@ -301,7 +311,9 @@ public class BookStore {
                         } catch (DaoException e) {
                             socketWriter.println("Error accessing database");
                         }
-                    } else if (request.startsWith("quit")) {
+                    }
+
+                    else if (request.startsWith("quit")) {
                         socketWriter.println("Goodbye.");
                         break;
                     } else {

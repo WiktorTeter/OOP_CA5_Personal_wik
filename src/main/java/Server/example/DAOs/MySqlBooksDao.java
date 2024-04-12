@@ -20,6 +20,7 @@ package Server.example.DAOs;
 
 import Server.example.DTOs.Book;
 import Server.example.Exceptions.DaoException;
+import Server.example.org.BookStore;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,59 +34,23 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
      * @throws DaoException
      */
 
-    public List<Book> findAllBooks() throws DaoException
-    {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        List<Book> usersList = new ArrayList<>();
+    public List<Book> findAllBooks() throws DaoException {
+        List<Book> bookList = new ArrayList<>();
+        try (Connection connection = this.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM books");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        try
-        {
-            //Get connection object using the getConnection() method inherited
-            // from the super class (MySqlDao.java)
-            connection = this.getConnection();
-
-            String query = "SELECT * FROM books";
-            preparedStatement = connection.prepareStatement(query);
-
-            //Using a PreparedStatement to execute SQL...
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next())
-            {
+            while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String author = resultSet.getString("author");
                 float price = resultSet.getFloat("price");
-                System.out.println("ID: " + id + ", Title: " + title + ", Author: " + author + ", Price: " + price);
-//                Book u = new Book(id, title, author, price);
-//                usersList.add(u);
+                bookList.add(new Book(id, title, author, price));
             }
-        } catch (SQLException e)
-        {
-            throw new DaoException("findAllUseresultSet() " + e.getMessage());
-        } finally
-        {
-            try
-            {
-                if (resultSet != null)
-                {
-                    resultSet.close();
-                }
-                if (preparedStatement != null)
-                {
-                    preparedStatement.close();
-                }
-                if (connection != null)
-                {
-                    freeConnection(connection);
-                }
-            } catch (SQLException e)
-            {
-                throw new DaoException("findAllUsers() " + e.getMessage());
-            }
+        } catch (SQLException e) {
+            throw new DaoException("findAllBooks() " + e.getMessage());
         }
-        return usersList;     // may be empty
+        return bookList;
     }
 
     /**
@@ -242,10 +207,6 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
 
     // Feature 7 - Convert List of Entities to a JSON String
     public String convertListToJSON(List<Book> books) {
-        String url = "jdbc:mysql://localhost:3306/bookshop";
-        String userName = "root";
-        String password = "";
-
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (Book book : books) {
