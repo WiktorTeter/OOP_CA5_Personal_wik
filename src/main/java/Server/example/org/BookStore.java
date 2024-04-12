@@ -39,6 +39,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Scanner;
+
 import Server.example.DAOs.MySqlBooksDao;
 import Server.example.DAOs.UserDaoInterface;
 import Server.example.DTOs.Book;
@@ -49,15 +51,25 @@ public class BookStore {
     public static UserDaoInterface userDao = new MySqlBooksDao();
     final int SERVER_PORT_NUMBER = 8888;  // could be any port from 1024 to 49151 (that doesn't clash with other Apps)
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DaoException {
         BookStore server = new BookStore();
-        server.start();
+        System.out.println("Press 1 to stay in server side or 2 to go to client side: ");
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        if (choice == 1) {
+            server.runMenu();  // Run the server management menu directly
+        } else {
+            server.start();  // Start the normal server operation
+        }
+        input.close();
     }
+
+
 
     public void start() {
 
-        ServerSocket serverSocket =null;
-        Socket clientSocket =null;
+        ServerSocket serverSocket = null;
+        Socket clientSocket = null;
 
         try {
             serverSocket = new ServerSocket(SERVER_PORT_NUMBER);
@@ -84,16 +96,15 @@ public class BookStore {
             }
         } catch (IOException ex) {
             System.out.println(ex);
-        }
-        finally{
+        } finally {
             try {
-                if(clientSocket!=null)
+                if (clientSocket != null)
                     clientSocket.close();
             } catch (IOException e) {
                 System.out.println(e);
             }
             try {
-                if(serverSocket!=null)
+                if (serverSocket != null)
                     serverSocket.close();
             } catch (IOException e) {
                 System.out.println(e);
@@ -102,75 +113,90 @@ public class BookStore {
         }
         System.out.println("Server: Server exiting, Goodbye!");
     }
-}
+    private void runMenu() throws DaoException {
+        Scanner input = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.println("\n1. View All Books");
+            System.out.println("2. Find Book by ID");
+            System.out.println("3. Delete Book by ID");
+            System.out.println("4. Insert New Book");
+            System.out.println("5. Update Existing Book");
+            System.out.println("6. Find Books by Filter");
+            System.out.println("7. Display All Books in JSON Format");
+            System.out.println("8. Convert Book by ID to JSON");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
 
-class ClientHandler implements Runnable   // each ClientHandler communicates with one Client
-{
-    BufferedReader socketReader;
-    PrintWriter socketWriter;
-    Socket clientSocket;
-    final int clientNumber;
-
-    // Constructor
-    public ClientHandler(Socket clientSocket, int clientNumber) {
-        this.clientSocket = clientSocket;  // store socket for closing later
-        this.clientNumber = clientNumber;  // ID number that we are assigning to this client
-        try {
-            // assign to fields
-            this.socketWriter = new PrintWriter(clientSocket.getOutputStream(), true);
-            this.socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * run() method is called by the Thread it is assigned to.
-     * This code runs independently of all other threads.
-     */
-    @Override
-    public void run() {
-        String request;
-        try {
-            while ((request = socketReader.readLine()) != null) {
-                System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + request);
-
-                // Implement our PROTOCOL
-                // The protocol is the logic that determines the responses given based on requests received.
-                //
-                if (request.startsWith("time"))  // so, client wants the time !
-                {
-                    LocalTime time = LocalTime.now();  // get the time
-                    socketWriter.println(time);  // send the time to client (as a string of characters)
-                    System.out.println("Server message: time sent to client.");
-                } else if (request.startsWith("echo")) {
-                    String message = request.substring(5); // strip off the leading substring "echo "
-                    socketWriter.println(message);   // send the received message back to the client
-                    System.out.println("Server message: echo message sent to client.");
-                } else if (request.startsWith("quit"))
-                {
-                    socketWriter.println("Sorry to see you leaving. Goodbye.");
-                    System.out.println("Server message: Client has notified us that it is quitting.");
-                }
-                else{
-                    socketWriter.println("error I'm sorry I don't understand your request");
-                    System.out.println("Server message: Invalid request from client.");
-                }
+            choice = input.nextInt();
+            switch (choice) {
+                case 1:
+                    findAllBooks();
+                    break;
+                case 2:
+                    System.out.println("Please enter the book ID: ");
+                    int bookID = input.nextInt();
+                    getBookByID(bookID);
+                    break;
+                case 3:
+                    System.out.println("Please enter the book ID: ");
+                    int bookID2 = input.nextInt();
+                    deleteBookByID(bookID2);
+                    break;
+                case 4:
+                    System.out.println("Please enter the book ID: ");
+                    int bookID3 = input.nextInt();
+                    input.nextLine(); // Consume newline character
+                    System.out.println("Please enter the book title: ");
+                    String title = input.nextLine();
+                    System.out.println("Please enter the book author: ");
+                    String author = input.nextLine();
+                    System.out.println("Please enter the book price: ");
+                    float price = input.nextFloat();
+                    insertBook(bookID3, title, author, price);
+                    break;
+                case 5:
+                    System.out.println("Please enter the book ID: ");
+                    int bookID4 = input.nextInt();
+                    input.nextLine(); // Consume newline character
+                    System.out.println("Please enter the book title: ");
+                    String title2 = input.nextLine();
+                    System.out.println("Please enter the book author: ");
+                    String author2 = input.nextLine();
+                    System.out.println("Please enter the book price: ");
+                    float price2 = input.nextFloat();
+                    updateBookByID(bookID4, title2, author2, price2);
+                    break;
+                case 6:
+                    System.out.println("Please enter the book ID: ");
+                    int bookID5 = input.nextInt();
+                    input.nextLine(); // Consume newline character
+                    System.out.println("Please enter the book title: ");
+                    String title3 = input.nextLine();
+                    System.out.println("Please enter the book author: ");
+                    String author3 = input.nextLine();
+                    System.out.println("Please enter the book price: ");
+                    float price3 = input.nextFloat();
+                    Book filter = new Book(bookID5, title3, author3, price3);
+                    getBookByFilter(filter);
+                    break;
+                case 7:
+                    findAllBooksAndConvertToJSON();
+                    break;
+                case 8:
+                    System.out.println("Please enter the book ID for JSON conversion: ");
+                    int bookIDJson = input.nextInt();
+                    convertBookByIDToJson(bookIDJson);
+                    break;
+                case 0:
+                    System.out.println("Exiting...");
+                    input.close();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            this.socketWriter.close();
-            try {
-                this.socketReader.close();
-                this.clientSocket.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        System.out.println("Server: (ClientHandler): Handler for Client " + clientNumber + " is terminating .....");
+        } while (choice != 0);
     }
-
     private static void findAllBooks() throws DaoException {
         List<Book> books = BookStore.userDao.findAllBooks();
         for (Book book : books) {
@@ -178,13 +204,14 @@ class ClientHandler implements Runnable   // each ClientHandler communicates wit
         }
 
 
-
     }
+
     private static void getBookByID(int id) throws DaoException {
         Book book = BookStore.userDao.getBookByID(id);
         System.out.println(book);
     }
-    private static void deleteBookByID(int id)  {
+
+    private static void deleteBookByID(int id) {
         Book book = null;
         try {
             book = BookStore.userDao.deleteBookByID(id);
@@ -193,6 +220,7 @@ class ClientHandler implements Runnable   // each ClientHandler communicates wit
         }
         System.out.println(book);
     }
+
     private static void insertBook(int id, String title, String author, float price) {
         try {
             BookStore.userDao.insertBook(id, title, author, price);
@@ -200,6 +228,7 @@ class ClientHandler implements Runnable   // each ClientHandler communicates wit
             throw new RuntimeException(e);
         }
     }
+
     private static void updateBookByID(int id, String title, String author, float price) {
         try {
             BookStore.userDao.updateBookByID(id, title, author, price);
@@ -207,6 +236,7 @@ class ClientHandler implements Runnable   // each ClientHandler communicates wit
             throw new RuntimeException(e);
         }
     }
+
     private static void getBookByFilter(Book filter) {
         List<Book> books = BookStore.userDao.getBookByFilter(filter);
         for (Book book : books) {
@@ -232,6 +262,70 @@ class ClientHandler implements Runnable   // each ClientHandler communicates wit
         }
     }
 }
+    class ClientHandler implements Runnable {
+        BufferedReader socketReader;
+        PrintWriter socketWriter;
+        Socket clientSocket;
+        final int clientNumber;
+
+        public ClientHandler(Socket clientSocket, int clientNumber) {
+            this.clientSocket = clientSocket;
+            this.clientNumber = clientNumber;
+            try {
+                this.socketWriter = new PrintWriter(clientSocket.getOutputStream(), true);
+                this.socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run() {
+            String request;
+            try {
+                while ((request = socketReader.readLine()) != null) {
+                    System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + request);
+
+                    if (request.startsWith("display ")) {
+                        try {
+                            int id = Integer.parseInt(request.substring(8).trim());
+                            Book book = BookStore.userDao.getBookByID(id);
+                            if (book != null) {
+                                String json = ((MySqlBooksDao) BookStore.userDao).convertEntityToJSON(book);
+                                socketWriter.println(json);
+                            } else {
+                                socketWriter.println("No book found with ID: " + id);
+                            }
+                        } catch (NumberFormatException e) {
+                            socketWriter.println("Error: Invalid ID format");
+                        } catch (DaoException e) {
+                            socketWriter.println("Error accessing database");
+                        }
+                    } else if (request.startsWith("quit")) {
+                        socketWriter.println("Goodbye.");
+                        break;
+                    } else {
+                        socketWriter.println("Sorry, I don't understand");
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    socketWriter.close();
+                    socketReader.close();
+                    clientSocket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
+
+
 
 
 
