@@ -51,7 +51,9 @@ public class menu {
 
                 if(userInput.equalsIgnoreCase("quit")) {
                     continueRunning = false;
-                } else if(userInput.toLowerCase().startsWith("display")) {
+                }
+
+                else if(userInput.toLowerCase().startsWith("display")) {
                     String[] parts = userInput.split(" ");
                     if(parts.length > 1) {
                         out.println("display " + parts[1]);  // Send command to server
@@ -60,12 +62,32 @@ public class menu {
                     } else {
                         System.out.println("Invalid command. Usage: display <id>");
                     }
-                } if (userInput.equalsIgnoreCase("display all")) {
+                }
+
+                if (userInput.equalsIgnoreCase("display all")) {
                     out.println("display all"); // Send command to server
                     String response = in.readLine(); // Read JSON response from server
                     System.out.println("Received from server: ");
                     System.out.println(response); // Display JSON or further process it
                 }
+                if (userInput.equalsIgnoreCase("add book")) {
+                    System.out.println("Enter book details to add:");
+                    System.out.print("ID: ");
+                    int id = consoleInput.nextInt(); consoleInput.nextLine(); // Consumes newline
+                    System.out.print("Title: ");
+                    String title = consoleInput.nextLine().replace("\"", "\\\"");
+                    System.out.print("Author: ");
+                    String author = consoleInput.nextLine().replace("\"", "\\\"");
+                    System.out.print("Price: ");
+                    float price = consoleInput.nextFloat(); consoleInput.nextLine(); // Consumes newline
+
+                    String jsonRequest = String.format("{\"id\": %d, \"title\": \"%s\", \"author\": \"%s\", \"price\": %.2f}", id, title, author, price);
+                    out.println("add book " + jsonRequest);  // Send the JSON to the server
+
+                    String response = in.readLine();  // Read the response from the server
+                    System.out.println("Response from server: " + response);
+                }
+
                 else {
                     out.println(userInput);
                     String serverResponse = in.readLine();
@@ -77,5 +99,3 @@ public class menu {
         }
     }
 }
-
-//  LocalTime time = LocalTime.parse(timeString); // Parse String -> convert to LocalTime object if required LocalTime.parse(timeString); // Parse timeString -> convert to LocalTime object if required

@@ -296,6 +296,30 @@ public class BookStore {
                         }
                     }
 
+                    if (request.startsWith("add book ")) {
+                        String jsonInput = request.substring(9); // Assuming the JSON starts after "add book "
+
+                        try {
+                            int idIndex = jsonInput.indexOf("\"id\":") + 5;
+                            int id = Integer.parseInt(jsonInput.substring(idIndex, jsonInput.indexOf(',', idIndex)).trim());
+
+                            int titleIndex = jsonInput.indexOf("\"title\":") + 9;
+                            String title = jsonInput.substring(titleIndex, jsonInput.indexOf('\"', titleIndex + 1));
+
+                            int authorIndex = jsonInput.indexOf("\"author\":") + 10;
+                            String author = jsonInput.substring(authorIndex, jsonInput.indexOf('\"', authorIndex + 1));
+
+                            int priceIndex = jsonInput.indexOf("\"price\":") + 8;
+                            float price = Float.parseFloat(jsonInput.substring(priceIndex, jsonInput.indexOf('}', priceIndex)).trim());
+
+                            BookStore.userDao.insertBook(id, title, author, price);
+                            socketWriter.println("{\"success\": \"Book added successfully.\"}");
+                        } catch (Exception e) {
+                            socketWriter.println("{\"error\": \"Failed to add book: " + e.getMessage() + "\"}");
+                        }
+                    }
+
+
                     if (request.startsWith("display ")) {
                         try {
                             int id = Integer.parseInt(request.substring(8).trim());
