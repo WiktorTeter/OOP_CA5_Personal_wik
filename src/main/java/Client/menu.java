@@ -26,51 +26,32 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class menu {
+    final static int SERVER_PORT_NUMBER = 8888;
+    final static String SERVER_HOST = "localhost";
 
-    final int SERVER_PORT_NUMBER = 8888;
     public static void main(String[] args) {
-        menu client = new menu();
-        client.start();
+        new menu().start();
     }
 
     public void start() {
+        try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT_NUMBER);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+             Scanner consoleInput = new Scanner(System.in)) {
 
-        try (
-                Socket socket = new Socket("localhost", SERVER_PORT_NUMBER);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        ) {
             System.out.println("Client message: The Client is running and has connected to the server");
-
-            Scanner consoleInput = new Scanner(System.in);
-            boolean continueRunning = true;
-            while(continueRunning) {
-                System.out.println("Valid commands are: \"display all\", \"display <id>\", \"add book\" ,\"quit\"");
+            while (true) {
+                System.out.println("Valid commands are: \"display all\", \"display <id>\", \"add book\", \"delete book <id>\", \"quit\"");
                 System.out.print("Please enter a command: ");
-                String userInput = consoleInput.nextLine();
+                String userInput = consoleInput.nextLine().trim();
 
-                if(userInput.equalsIgnoreCase("quit")) {
-                    continueRunning = false;
-                }
-
-                else if(userInput.toLowerCase().startsWith("display")) {
-                    String[] parts = userInput.split(" ");
-                    if(parts.length > 1) {
-                        out.println("display " + parts[1]);  // Send command to server
-                        String response = in.readLine();  // Read response from server
-                        System.out.println("Received from server: " + response);
-                    } else {
-                        System.out.println("Invalid command. Usage: display <id>");
-                    }
-                }
-
-                if (userInput.equalsIgnoreCase("display all")) {
+                if ("quit".equalsIgnoreCase(userInput)) {
+                    out.println(userInput);
+                    break;
+                } else if (userInput.equalsIgnoreCase("display all")) {
                     out.println("display all"); // Send command to server
-                    String response = in.readLine(); // Read JSON response from server
-                    System.out.println("Received from server: ");
-                    System.out.println(response); // Display JSON or further process it
                 }
-                if (userInput.equalsIgnoreCase("add book")) {
+                else if (userInput.equalsIgnoreCase("add book")) {
                     System.out.println("Enter book details to add:");
                     System.out.print("ID: ");
                     int id = consoleInput.nextInt(); consoleInput.nextLine(); // Consumes newline
@@ -83,19 +64,17 @@ public class menu {
 
                     String jsonRequest = String.format("{\"id\": %d, \"title\": \"%s\", \"author\": \"%s\", \"price\": %.2f}", id, title, author, price);
                     out.println("add book " + jsonRequest);  // Send the JSON to the server
-
-                    String response = in.readLine();  // Read the response from the server
-                    System.out.println("Response from server: " + response);
                 }
-
                 else {
                     out.println(userInput);
-                    String serverResponse = in.readLine();
-                    System.out.println("Server response: " + serverResponse);
                 }
+
+                String response = in.readLine();
+                System.out.println("Server response: " + response);
             }
         } catch (IOException e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
     }
+
 }
