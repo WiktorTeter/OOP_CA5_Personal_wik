@@ -37,7 +37,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -199,21 +198,23 @@ public class BookStore {
             }
         } while (choice != 0);
     }
-    private static void findAllBooks() throws DaoException {
+    public static List<Book> findAllBooks() throws DaoException {
         List<Book> books = userDao.findAllBooks();
         for (Book book : books) {
             System.out.println(book);
         }
 
 
+        return books;
     }
 
-    private static void getBookByID(int id) throws DaoException {
+    public static Book getBookByID(int id) throws DaoException {
         Book book = userDao.getBookByID(id);
         System.out.println(book);
+        return book;
     }
 
-    private static void deleteBookByID(int id) {
+    public static void deleteBookByID(int id) {
         Book book = null;
         try {
             book = userDao.deleteBookByID(id);
@@ -223,7 +224,7 @@ public class BookStore {
         System.out.println(book);
     }
 
-    private static void insertBook(int id, String title, String author, float price) {
+    public static void insertBook(int id, String title, String author, float price) {
         try {
             userDao.insertBook(id, title, author, price);
         } catch (DaoException e) {
@@ -231,7 +232,7 @@ public class BookStore {
         }
     }
 
-    private static void updateBookByID(int id, String title, String author, float price) {
+    public static void updateBookByID(int id, String title, String author, float price) {
         try {
             userDao.updateBookByID(id, title, author, price);
         } catch (DaoException e) {
@@ -239,11 +240,12 @@ public class BookStore {
         }
     }
 
-    private static void getBookByFilter(Book filter) {
+    public static List<Book> getBookByFilter(Book filter) {
         List<Book> books = userDao.getBookByFilter(filter);
         for (Book book : books) {
             System.out.println(book);
         }
+        return books;
     }
 
     private static void findAllBooksAndConvertToJSON() throws DaoException {

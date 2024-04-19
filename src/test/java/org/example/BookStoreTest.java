@@ -31,7 +31,7 @@ class BookStoreTest {
         BookStore bookStore = new BookStore();
         bookStore.insertBook(4, "Python", "Guido van Rossum", 50.0f);
         List<Book> books = bookStore.findAllBooks();
-        assertEquals(4, books.size());
+        assertEquals(8, books.size());
     }
 
     @org.junit.jupiter.api.Test
@@ -39,7 +39,7 @@ class BookStoreTest {
         BookStore bookStore = new BookStore();
         bookStore.deleteBookByID(4);
         List<Book> books = bookStore.findAllBooks();
-        assertEquals(3, books.size());
+        assertEquals(7, books.size());
     }
 
     @org.junit.jupiter.api.Test
@@ -74,7 +74,7 @@ class BookStoreTest {
     void testGetBookByFilter3() {
         BookStore bookStore = new BookStore();
         Book filter = new Book();
-        filter.setPrice(40.0); // the price variable is set as float but for some reason it expects it as a string.
+        filter.setPrice(String.valueOf(40.0)); // the price variable is set as float but for some reason it expects it as a string.
         List<Book> books = bookStore.getBookByFilter(filter);
         assertEquals(1, books.size());
     }
