@@ -33,7 +33,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
      * @return List of User objects
      * @throws DaoException
      */
-
+    /**
+     * Main author: Wiktor Teter
+     * Other contributors: Eljesa Mesi
+     *
+     */
     public List<Book> findAllBooks() throws DaoException {
         List<Book> bookList = new ArrayList<>();
         try (Connection connection = this.getConnection();
@@ -60,7 +64,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
      * @return User object if found, or null otherwise
      * @throws DaoException
      */
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     //feature 2
     public Book getBookByID(int id) {
         String url = "jdbc:mysql://localhost:3306/bookshop";
@@ -79,7 +87,7 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
                     String author = rs.getString("author");
                     float price = rs.getFloat("price");
                     System.out.println("Book found:");
-                    return new Book(bookId, title, author, price); // Return the found book
+                    return new Book(bookId, title, author, price);
                 } else {
                     System.out.println("No book found with ID: " + id);
                 }
@@ -88,8 +96,12 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
-        return null; // Return null if book is not found
-    }
+        return null;
+    }    /**
+ * Main author: Eljesa Mesi
+ * Other contributors: Wiktor Teter
+ *
+ */
     //feature 3
     public Book deleteBookByID(int id){
         String url = "jdbc:mysql://localhost:3306/bookshop";
@@ -115,7 +127,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
 
         }
         return null;
-    }
+    }    /**
+ * Main author: Eljesa Mesi
+ * Other contributors: Wiktor Teter
+ *
+ */
     //feature 4
     public void insertBook(int id, String title, String author, float price){
         String url = "jdbc:mysql://localhost:3306/bookshop";
@@ -143,7 +159,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
             e.printStackTrace(); //
 
         }
-    }
+    }    /**
+ * Main author: Eljesa Mesi
+ * Other contributors: Wiktor Teter
+ *
+ */
     //feature 5
     //update an existing entity by id
     public void updateBookByID(int id, String title, String author, float price){
@@ -173,7 +193,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
 
         }
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     @Override
     public List<Book> getBookByFilter(Book filter) {
         List<Book> books = new ArrayList<>();
@@ -204,7 +228,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
         }
         return books;
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     // Feature 7 - Convert List of Entities to a JSON String
     public String convertListToJSON(List<Book> books) {
         StringBuilder json = new StringBuilder();
@@ -223,7 +251,11 @@ public class MySqlBooksDao extends MySqlDao implements UserDaoInterface
         json.append("]");
         return json.toString();
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     // Feature 8 - Convert a single Entity by Key to a JSON String
     public String convertEntityToJSON(Book book) {
         if (book == null) {

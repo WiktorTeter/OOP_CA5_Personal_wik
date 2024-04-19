@@ -28,7 +28,11 @@ import java.util.Scanner;
 public class menu {
     final static int SERVER_PORT_NUMBER = 8888;
     final static String SERVER_HOST = "localhost";
-
+    /**
+     * Main author: Wiktor Teter
+     * Other contributors: Eljesa Mesi
+     *
+     */
     public static void main(String[] args) {
         new menu().start();
     }
@@ -49,7 +53,7 @@ public class menu {
                     out.println(userInput);
                     break;
                 } else if (userInput.equalsIgnoreCase("display all")) {
-                    out.println("display all"); // Send command to server
+                    out.println("display all");
                 }
                 else if (userInput.equalsIgnoreCase("add book")) {
                     System.out.println("Enter book details to add:");
@@ -60,10 +64,10 @@ public class menu {
                     System.out.print("Author: ");
                     String author = consoleInput.nextLine().replace("\"", "\\\"");
                     System.out.print("Price: ");
-                    float price = consoleInput.nextFloat(); consoleInput.nextLine(); // Consumes newline
+                    float price = consoleInput.nextFloat(); consoleInput.nextLine();
 
                     String jsonRequest = String.format("{\"id\": %d, \"title\": \"%s\", \"author\": \"%s\", \"price\": %.2f}", id, title, author, price);
-                    out.println("add book " + jsonRequest);  // Send the JSON to the server
+                    out.println("add book " + jsonRequest);
                 }
                 else {
                     out.println(userInput);

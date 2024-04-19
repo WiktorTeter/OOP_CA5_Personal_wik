@@ -50,7 +50,7 @@ import static Server.example.org.BookStore.userDao;
 
 public class BookStore {
     public static UserDaoInterface userDao = new MySqlBooksDao();
-    final int SERVER_PORT_NUMBER = 8888;  // could be any port from 1024 to 49151 (that doesn't clash with other Apps)
+    final int SERVER_PORT_NUMBER = 8888;
 
     public static void main(String[] args) throws DaoException {
         BookStore server = new BookStore();
@@ -58,9 +58,9 @@ public class BookStore {
         Scanner input = new Scanner(System.in);
         int choice = input.nextInt();
         if (choice == 1) {
-            server.runMenu();  // Run the server management menu directly
+            server.runMenu();
         } else {
-            server.start();  // Start the normal server operation
+            server.start();
         }
         input.close();
     }
@@ -75,7 +75,7 @@ public class BookStore {
         try {
             serverSocket = new ServerSocket(SERVER_PORT_NUMBER);
             System.out.println("Server has started.");
-            int clientNumber = 0;  // a number sequentially allocated to each new client (for identification purposes here)
+            int clientNumber = 0;
 
             while (true) {
                 System.out.println("Server: Listening/waiting for connections on port ..." + SERVER_PORT_NUMBER);
@@ -87,8 +87,6 @@ public class BookStore {
                 System.out.println("Server: Port number of remote client: " + clientSocket.getPort());
                 System.out.println("Server: Port number of the socket used to talk with client " + clientSocket.getLocalPort());
 
-                // create a new ClientHandler for the requesting client, passing in the socket and client number,
-                // pass the handler into a new thread, and start the handler running in the thread.
                 Thread t = new Thread(new ClientHandler(clientSocket, clientNumber));
                 t.start();
 
@@ -114,6 +112,11 @@ public class BookStore {
         }
         System.out.println("Server: Server exiting, Goodbye!");
     }
+    /**
+     * Main author: Wiktor Teter
+     * Other contributors: Eljesa Mesi
+     *
+     */
     private void runMenu() throws DaoException {
         Scanner input = new Scanner(System.in);
         int choice;
@@ -147,7 +150,7 @@ public class BookStore {
                 case 4:
                     System.out.println("Please enter the book ID: ");
                     int bookID3 = input.nextInt();
-                    input.nextLine(); // Consume newline character
+                    input.nextLine();
                     System.out.println("Please enter the book title: ");
                     String title = input.nextLine();
                     System.out.println("Please enter the book author: ");
@@ -159,7 +162,7 @@ public class BookStore {
                 case 5:
                     System.out.println("Please enter the book ID: ");
                     int bookID4 = input.nextInt();
-                    input.nextLine(); // Consume newline character
+                    input.nextLine();
                     System.out.println("Please enter the book title: ");
                     String title2 = input.nextLine();
                     System.out.println("Please enter the book author: ");
@@ -171,7 +174,7 @@ public class BookStore {
                 case 6:
                     System.out.println("Please enter the book ID: ");
                     int bookID5 = input.nextInt();
-                    input.nextLine(); // Consume newline character
+                    input.nextLine();
                     System.out.println("Please enter the book title: ");
                     String title3 = input.nextLine();
                     System.out.println("Please enter the book author: ");
@@ -198,6 +201,11 @@ public class BookStore {
             }
         } while (choice != 0);
     }
+    /**
+     * Main author: Wiktor Teter
+     * Other contributors: Eljesa Mesi
+     *
+     */
     public static List<Book> findAllBooks() throws DaoException {
         List<Book> books = userDao.findAllBooks();
         for (Book book : books) {
@@ -207,13 +215,21 @@ public class BookStore {
 
         return books;
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     public static Book getBookByID(int id) throws DaoException {
         Book book = userDao.getBookByID(id);
         System.out.println(book);
         return book;
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     public static void deleteBookByID(int id) {
         Book book = null;
         try {
@@ -223,7 +239,11 @@ public class BookStore {
         }
         System.out.println(book);
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     public static void insertBook(int id, String title, String author, float price) {
         try {
             userDao.insertBook(id, title, author, price);
@@ -231,7 +251,11 @@ public class BookStore {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     public static void updateBookByID(int id, String title, String author, float price) {
         try {
             userDao.updateBookByID(id, title, author, price);
@@ -239,7 +263,11 @@ public class BookStore {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     public static List<Book> getBookByFilter(Book filter) {
         List<Book> books = userDao.getBookByFilter(filter);
         for (Book book : books) {
@@ -247,14 +275,22 @@ public class BookStore {
         }
         return books;
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     private static void findAllBooksAndConvertToJSON() throws DaoException {
-        List<Book> books = userDao.findAllBooks();  // Fetch all books
-        String json = ((MySqlBooksDao) userDao).convertListToJSON(books);  // Convert to JSON
+        List<Book> books = userDao.findAllBooks();
+        String json = ((MySqlBooksDao) userDao).convertListToJSON(books);
         System.out.println("JSON representation of all books:");
-        System.out.println(json);  // Print JSON
+        System.out.println(json);
     }
-
+    /**
+     * Main author: Eljesa Mesi
+     * Other contributors: Wiktor Teter
+     *
+     */
     private static void convertBookByIDToJson(int id) throws DaoException {
         Book book = userDao.getBookByID(id);
         if (book != null) {
